@@ -1,8 +1,9 @@
 import express from 'express';
 import 'dotenv/config';
-
+import { Book } from './entities/Book';
 import healthcheckRoutes from './controllers/healthcheckController';
 import bookRoutes from './controllers/bookController';
+import { Connection, Request } from 'tedious';
 
 const port = process.env['PORT'] || 3000;
 
@@ -18,7 +19,6 @@ app.listen(port, () => {
 app.use('/healthcheck', healthcheckRoutes);
 app.use('/books', bookRoutes);
 
-const Connection = require('tedious').Connection;
 const config = {
     server: 'CHAMELEON',
     authentication: {
@@ -37,28 +37,41 @@ const config = {
 };
 const connection = new Connection(config);
 
-connection.connect((err) => {
-    if (err) {
-        console.log('Connection Failed');
-        throw err;
-    }
-    // executeStatement();
-});
+app.get('/books', function (req, res) {
 
-function executeStatement() {
-    // @ts-ignore
-    const request = new Request('select * from Books', function (
-        err,
-        rowCount,
-    ) {
+
+    connection.connect((err) => {
         if (err) {
+            console.log('Connection Failed');
             throw err;
         }
-        console.log('DONE!');
-        connection.close();
+        executeStatement();
     });
-}
 
-app.get('/books', function (req, res) {
-    res.send('hello world TEST');
+    const bookArray: Book[] = [];
+
+    function executeStatement() {
+        const request = new Request('select * from Books', function (err) {
+            if (err) {
+                throw err;
+            }
+        });
+
+        connection.execSql(request);
+
+        request.on('row', function (columns) {
+            const array: any[] = [];
+            columns.forEach(function (column) {
+                array.push(column.value);
+            });
+
+            bookArray.push(new Book(array[0], array[1]));
+        });
+
+        request.on('doneProc', function () {
+            console.log(bookArray);
+            res.send(JSON.stringify(bookArray));
+        });
+
+    }
 });
