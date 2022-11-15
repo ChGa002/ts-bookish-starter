@@ -20,7 +20,7 @@ app.listen(port, () => {
  * Primary app routes.
  */
 app.use('/healthcheck', healthcheckRoutes);
-app.use('/books', bookRoutes);
+app.use('/books', passport.authenticate('jwt', {session: false}), bookRoutes);
 app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
@@ -42,45 +42,6 @@ const config = {
         database: 'bookish',
     },
 };
-const connection = new Connection(config);
 
-app.get(
-    '/books2',
-    passport.authenticate('jwt', {session: false}),
-    function (req, res) {
-        connection.connect((err) => {
-            if (err) {
-                console.log('Connection Failed');
-                throw err;
-            }
-            executeStatement();
-        });
-
-        const bookArray: Book[] = [];
-
-        function executeStatement() {
-            const request = new Request('select * from Books', function (err) {
-                if (err) {
-                    throw err;
-                }
-            });
-
-            connection.execSql(request);
-
-            request.on('row', function (columns) {
-                const array: any[] = [];
-                columns.forEach(function (column) {
-                    array.push(column.value);
-                });
-
-                bookArray.push(new Book(array[0], array[1]));
-            });
-
-            request.on('doneProc', function () {
-                res.send(JSON.stringify(bookArray));
-            });
-        }
-    },
-);
 
 // "eyJhbGciOiJIUzI1NiJ9.MQ.EAsT0TSknH90KJFcp9iRFFPZfIQmILPnY10Z1OmMGEM"
