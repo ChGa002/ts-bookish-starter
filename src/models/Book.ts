@@ -1,3 +1,5 @@
+import { Copy } from './Copy';
+
 const { Model, DataTypes } = require('sequelize');
 import bookishDb from '../databaseConfig';
 
@@ -15,8 +17,10 @@ Book.init(
             allowNull: false,
         },
     },
-    { sequelize: bookishDb },
+    { sequelize: bookishDb, timestamps: false },
 );
+
+// Book.hasMany(Copy, { foreignKey: 'book_id'});
 
 // export class Book {
 //     isbn: number;

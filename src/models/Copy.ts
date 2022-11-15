@@ -1,24 +1,25 @@
 const { Model, DataTypes } = require('sequelize');
 import bookishDb from '../databaseConfig';
+import { Book } from './Book';
+// import { User } from './User';
 
-export class Author extends Model {
+export class Copy extends Model {
     otherPublicField;
 }
-Author.init(
+Copy.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            autoIncrement: true,
             primaryKey: true,
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        surname: {
-            type: DataTypes.STRING,
+        // isbn: {
+        //     type: DataTypes.BIGINT,
+        // },
+        available: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
     },
     { sequelize: bookishDb, timestamps: false },
 );
+

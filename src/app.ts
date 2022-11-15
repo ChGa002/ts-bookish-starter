@@ -3,7 +3,12 @@ import 'dotenv/config';
 import healthcheckRoutes from './controllers/healthcheckController';
 import bookRoutes from './controllers/bookController';
 import userController from './controllers/userController';
-import { Author } from './models/Author';
+import { Book } from './models/Book';
+import { Copy } from './models/Copy';
+import { User } from './models/User';
+import { UserCopy } from './models/UserCopy';
+
+require('./models/associations');
 
 const passport = require('passport');
 require('./passport');
@@ -48,9 +53,25 @@ app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
 
-Author.findAll({ attributes: ['id', 'name', 'surname'] }).then((results) => {
+User.findOne({
+    where: { name: 'Billy' },
+    include: {
+        model: Copy,
+        as: 'Copies',
+    },
+}).then((results) => {
     console.log(results);
+    // results.forEach((result) => {
+    //     console.log(result.dataValues);
+    //     result.Copies.forEach((copy) => {
+    //         console.log(copy);
+    //     });
 });
+// });
+
+// UserCopy.findAll().then((results) => {
+//     console.log(results);
+// });
 // app.use('/user', passport.authenticate('jwt', { session: false }), user);
 
 // "eyJhbGciOiJIUzI1NiJ9.MQ.EAsT0TSknH90KJFcp9iRFFPZfIQmILPnY10Z1OmMGEM"
