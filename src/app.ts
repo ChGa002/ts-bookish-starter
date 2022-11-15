@@ -1,14 +1,17 @@
 import express from 'express';
 import 'dotenv/config';
-import { Book } from './entities/Book';
+import {Book} from './entities/Book';
 import healthcheckRoutes from './controllers/healthcheckController';
 import bookRoutes from './controllers/bookController';
-import { Connection, Request } from 'tedious';
+import {Connection, Request} from 'tedious';
+
+const passport = require('passport');
 require('./passport');
+
 const port = process.env['PORT'] || 3000;
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
@@ -21,6 +24,7 @@ app.use('/books', bookRoutes);
 app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
+// app.use('/user', passport.authenticate('jwt', { session: false }), user);
 
 const config = {
     server: 'CHAMELEON',
@@ -40,8 +44,10 @@ const config = {
 };
 const connection = new Connection(config);
 
-function getAllBooks() {
-    app.get('/books', function (req, res) {
+app.get(
+    '/books2',
+    passport.authenticate('jwt', {session: false}),
+    function (req, res) {
         connection.connect((err) => {
             if (err) {
                 console.log('Connection Failed');
@@ -74,6 +80,7 @@ function getAllBooks() {
                 res.send(JSON.stringify(bookArray));
             });
         }
-    });
-}
+    },
+);
 
+// "eyJhbGciOiJIUzI1NiJ9.MQ.EAsT0TSknH90KJFcp9iRFFPZfIQmILPnY10Z1OmMGEM"

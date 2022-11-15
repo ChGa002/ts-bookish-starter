@@ -3,6 +3,9 @@ const { Book } = require('./entities/Book');
 const { User } = require('./entities/User');
 const { Connection, Request } = require('tedious');
 const LocalStrategy = require('passport-local').Strategy;
+const passportJWT = require('passport-jwt');
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 
 const config = {
     server: 'CHAMELEON',
@@ -77,36 +80,24 @@ function verifyEmailPassword(email, password) {
     });
 }
 
-// return UserModel.findOne({ email, password })
-//     .then((user) => {
-//         if (!user) {
-//             return cb(null, false, {
-//                 message: 'Incorrect email or password.',
-//             });
-//         }
-//         return cb(null, user, {
-//             message: 'Logged In Successfully',
-//         });
-//     })
-//     .catch((err) => cb(err));
-
-/*export function correctUserAndPassword(username: string, password: string, connection){
-    var output;
-
-    var sql: string = "SELECT * FROM users WHERE username='" + username + "' and password='" + password + "'";
-    var request = new Request(sql, function(err){
-        if (err) {
-            console.log(err);
-        }
-    });
-
-    return new Promise((resolve, reject) => {
-
-        request.on('row', function(columns) {
-            output = columns[0].value;
-        });
-
-        request.on('error', error => reject(error));
-        request.on('doneProc', () => resolve(output));
-        connection.execSql(request);
-    });*/
+passport.use(
+    new JWTStrategy(
+        {
+            jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+            secretOrKey: 'your_jwt_secret',
+        },
+        function (jwtPayload, cb) {
+            return cb(null, jwtPayload);
+        },
+        //     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+        //     console.log(jwtPayload);
+        //     return UserModel.findOneById(jwtPayload.id)
+        //         .then((user) => {
+        //             return cb(null, user);
+        //         })
+        //         .catch((err) => {
+        //             return cb(err);
+        //         });
+        // },
+    ),
+);
