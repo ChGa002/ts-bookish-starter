@@ -1,12 +1,12 @@
 const passport = require('passport');
-const { Book } = require('./entities/Book');
-const { User } = require('./entities/User');
+const { Book } = require('./models/Book');
+const { User } = require('./models/User');
 const { Connection, Request } = require('tedious');
 const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-import {DatabaseConfig} from "./databaseConfig";
+const DatabaseConfig = require('./databaseConfig');
 
 
 passport.use(

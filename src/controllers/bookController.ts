@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express';
-import {Book} from "../entities/Book";
-import { Connection } from 'tedious';
+import {Router, Request, Response} from 'express';
+import {Book} from "../models/Book";
+import {Connection} from 'tedious';
 import {Request as TediousRequest} from 'tedious';
-import {DatabaseConfig} from "../databaseConfig";
+
+// import {DatabaseConfig} from "../databaseConfig";
 
 class BookController {
     router: Router;
@@ -49,44 +50,49 @@ class BookController {
         });
     }
 
+    // @ts-ignore
+    // @ts-ignore
     getAllBooks(req: Request, res: Response) {
+        // TODO: implement functionality
+        return res.status(500).json({
+            error: 'server_error',
+            error_description: 'Endpoint not implemented yet.',
+            /*const connection = new Connection(DatabaseConfig);
 
-        const connection = new Connection(DatabaseConfig);
-
-        connection.connect((err) => {
-            if (err) {
-                console.log('Connection Failed');
-                throw err;
-            }
-            executeStatement();
-        });
-
-        const bookArray: Book[] = [];
-
-        function executeStatement() {
-            const request = new TediousRequest('select * from Books', function (err) {
+            connection.connect((err) => {
                 if (err) {
+                    console.log('Connection Failed');
                     throw err;
                 }
+                executeStatement();
             });
 
-            connection.execSql(request);
+            const bookArray: Book[] = [];
 
-            request.on('row', function (columns) {
-                const array: any[] = [];
-                columns.forEach(function (column) {
-                    array.push(column.value);
+            function executeStatement() {
+                const request = new TediousRequest('select * from Books', function (err) {
+                    if (err) {
+                        throw err;
+                    }
                 });
 
-                bookArray.push(new Book(array[0], array[1]));
-            });
+                connection.execSql(request);
 
-            request.on('doneProc', function () {
-                return res.status(200).json({
-                    Books: bookArray
+                request.on('row', function (columns) {
+                    const array: any[] = [];
+                    columns.forEach(function (column) {
+                        array.push(column.value);
+                    });
+
+                    // bookArray.push(new Book(array[0], array[1]));
                 });
-            });
-        }
+
+                request.on('doneProc', function () {
+                    return res.status(200).json({
+                        Books: bookArray
+                    });
+                });*/
+        })
     }
 }
 
