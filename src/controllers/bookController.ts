@@ -27,11 +27,20 @@ class BookController {
     }
 
     createBook(req: Request, res: Response) {
-        // TODO: implement functionality
-        return res.status(500).json({
-            error: 'server_error',
-            error_description: 'Endpoint not implemented yet.',
-        });
+        try {
+            const newBook = Book.build({
+                isbn: req.query.isbn,
+                title: req.query.title,
+            });
+            newBook.save().then(() => {
+                return res.status(200).json({ status: 'OK' });
+            });
+        } catch (err) {
+            return res.status(500).json({
+                error: 'input_error',
+                error_description: 'isbn or title not provided',
+            });
+        }
     }
 
     addCopy(req: Request, res: Response) {
