@@ -22,4 +22,8 @@ router.post('/login', function (req, res, next) {
     })(req, res);
 });
 
+router.post('/register', function (req, res, next) {
+    return res.status(200).json({ status: 'Not implemented yet' });
+});
+
 module.exports = router;

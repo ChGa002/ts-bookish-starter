@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import healthcheckRoutes from './controllers/healthcheckController';
 import bookRoutes from './controllers/bookController';
+import userController from "./controllers/userController";
 
 const passport = require('passport');
 require('./passport');
@@ -19,6 +20,8 @@ app.listen(port, () => {
  */
 app.use('/healthcheck', healthcheckRoutes);
 app.use('/books', passport.authenticate('jwt', {session: false}), bookRoutes);
+app.use('/users', passport.authenticate('jwt', {session: false}), userController);
+
 app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
