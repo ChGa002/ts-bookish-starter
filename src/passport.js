@@ -6,23 +6,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+import {DatabaseConfig} from "./databaseConfig";
 
-const config = {
-    server: 'CHAMELEON',
-    authentication: {
-        type: 'default',
-        options: {
-            userName: 'cgandolfi',
-            password: 'Lollipop1',
-        },
-    },
-
-    options: {
-        trustServerCertificate: true,
-        trustedConnection: true,
-        database: 'bookish',
-    },
-};
 
 passport.use(
     new LocalStrategy(
@@ -49,7 +34,7 @@ passport.use(
 
 function verifyEmailPassword(email, password) {
     return new Promise((resolve, reject) => {
-        const connection = new Connection(config);
+        const connection = new Connection(DatabaseConfig);
         connection.connect((err) => {
             if (err) {
                 console.log('Connection Failed');

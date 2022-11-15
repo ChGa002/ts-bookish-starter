@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import {Book} from "../entities/Book";
 import { Connection } from 'tedious';
 import {Request as TediousRequest} from 'tedious';
+import {DatabaseConfig} from "../databaseConfig";
 
 class BookController {
     router: Router;
@@ -30,23 +31,8 @@ class BookController {
     }
 
     getAllBooks(req: Request, res: Response) {
-        const config = {
-            server: 'CHAMELEON',
-            authentication: {
-                type: 'default',
-                options: {
-                    userName: 'cgandolfi',
-                    password: 'Lollipop1',
-                },
-            },
 
-            options: {
-                trustServerCertificate: true,
-                trustedConnection: true,
-                database: 'bookish',
-            },
-        };
-        const connection = new Connection(config);
+        const connection = new Connection(DatabaseConfig);
 
         connection.connect((err) => {
             if (err) {
