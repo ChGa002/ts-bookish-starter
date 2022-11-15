@@ -4,7 +4,6 @@ import { Book } from './entities/Book';
 import healthcheckRoutes from './controllers/healthcheckController';
 import bookRoutes from './controllers/bookController';
 import { Connection, Request } from 'tedious';
-import {User} from "./entities/User";
 require('./passport');
 const port = process.env['PORT'] || 3000;
 
@@ -19,7 +18,7 @@ app.listen(port, () => {
  */
 app.use('/healthcheck', healthcheckRoutes);
 app.use('/books', bookRoutes);
-
+app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
 
@@ -72,47 +71,9 @@ function getAllBooks() {
             });
 
             request.on('doneProc', function () {
-                console.log(bookArray);
                 res.send(JSON.stringify(bookArray));
             });
         }
     });
 }
 
-// const email = 'BWiggs@gmail.com';
-// const password = 'Password1';
-// connection.connect((err) => {
-//     if (err) {
-//         console.log('Connection Failed');
-//         throw err;
-//     }
-//     executeStatement();
-// });
-//
-// function executeStatement() {
-//     const request = new Request(
-//         `select *
-//          from Users
-//          WHERE email = '${email}'
-//            AND password = '${password}'`,
-//         function (err) {
-//             if (err) {
-//                 throw err;
-//             }
-//         },
-//     );
-//
-//     connection.execSql(request);
-//     request.on('row', function (columns) {
-//         let user = User.from_row(columns);
-//         return cb(null, user, {
-//             message: 'Logged In Successfully',
-//         });
-//     });
-//
-//     request.on('doneProc', function () {
-//         return cb(null, false, {
-//             message: 'Incorrect email or password.',
-//         });
-//     });
-// }

@@ -5,8 +5,9 @@ const passport = require('passport');
 /* POST login. */
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', { session: false }, (err, user, info) => {
-
-        console.log("in auth")
+        console.log('in auth');
+        console.log(err);
+        console.log(user);
         if (err || !user) {
             return res.status(400).json({
                 message: 'Something is not right',
@@ -24,4 +25,4 @@ router.post('/login', function (req, res, next) {
     })(req, res);
 });
 
-module.exports = router ;
+module.exports = router;
