@@ -2,7 +2,6 @@ const { Model, DataTypes } = require('sequelize');
 import bookishDb from '../databaseConfig';
 
 export class Author extends Model {
-    otherPublicField;
 }
 Author.init(
     {

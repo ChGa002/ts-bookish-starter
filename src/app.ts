@@ -20,23 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
-// sequelize
-
-// const { Sequelize, Model, DataTypes } = require('sequelize');
-// const sequelize = new Sequelize('bookish', 'cgandolfi', 'Lollipop1', {
-//     host: 'CHAMELEON',
-//     dialect: 'mssql',
-// });
-//
-// try {
-//     sequelize
-//         .authenticate()
-//         .then((r) =>
-//             console.log('Connection has been established successfully.'),
-//         );
-// } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-// }
 
 /**
  * Primary app routes.
@@ -53,25 +36,3 @@ app.use(express.json());
 const auth = require('./auth');
 app.use('/auth', auth);
 
-User.findOne({
-    where: { name: 'Billy' },
-    include: {
-        model: Copy,
-        as: 'Copies',
-    },
-}).then((results) => {
-    console.log(results);
-    // results.forEach((result) => {
-    //     console.log(result.dataValues);
-    //     result.Copies.forEach((copy) => {
-    //         console.log(copy);
-    //     });
-});
-// });
-
-// UserCopy.findAll().then((results) => {
-//     console.log(results);
-// });
-// app.use('/user', passport.authenticate('jwt', { session: false }), user);
-
-// "eyJhbGciOiJIUzI1NiJ9.MQ.EAsT0TSknH90KJFcp9iRFFPZfIQmILPnY10Z1OmMGEM"

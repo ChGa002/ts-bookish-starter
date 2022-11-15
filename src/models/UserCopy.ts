@@ -4,7 +4,6 @@ import { Copy } from './Copy';
 import { User } from './User';
 
 export class UserCopy extends Model {
-    otherPublicField;
 }
 UserCopy.init(
     {

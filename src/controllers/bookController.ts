@@ -1,7 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { Book } from '../models/Book';
-import { Connection } from 'tedious';
-import { Request as TediousRequest } from 'tedious';
 const { Op } = require("sequelize");
 
 // import {DatabaseConfig} from "../databaseConfig";

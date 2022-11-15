@@ -1,10 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 import bookishDb from '../databaseConfig';
-import { Copy } from './Copy';
-import { UserCopy } from './UserCopy';
 
 export class User extends Model {
-    otherPublicField;
 }
 User.init(
     {
